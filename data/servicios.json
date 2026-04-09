@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "nombre": "Curso de Desarrollo Web",
+    "descripcion": "Aprende HTML, CSS y JavaScript",
+    "imagen": "https://via.placeholder.com/150"
+  },
+  {
+    "id": 2,
+    "nombre": "Curso de Python",
+    "descripcion": "Aprende Python desde cero",
+    "imagen": "https://via.placeholder.com/150"
+  }
+]
