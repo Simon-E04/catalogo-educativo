@@ -9,12 +9,23 @@ fetch('data/servicios.json')
 
     data.forEach(servicio => {
       contenedor.innerHTML += `
-        <div>
-          <h3>${servicio.nombre}</h3>
-          <p>${servicio.descripcion}</p>
-          <button onclick="verDetalle(${servicio.id})">Ver más</button>
-        </div>
-      `;
+  <div class="col-md-4">
+    <div class="card h-100 shadow-sm">
+
+      <img src="${servicio.imagen}" class="card-img-top">
+
+      <div class="card-body d-flex flex-column">
+        <h5 class="card-title">${servicio.nombre}</h5>
+        <p class="card-text">${servicio.descripcion}</p>
+
+        <button class="btn btn-primary mt-auto" onclick="verDetalle(${servicio.id})">
+          Ver más
+        </button>
+      </div>
+
+    </div>
+  </div>
+`;
     });
   });
 
@@ -45,13 +56,16 @@ fetch('data/servicios.json')
     }
 
     contenedor.innerHTML = `
-      <h2>${servicio.nombre}</h2>
-      <img src="${servicio.imagen}">
-      <p>${servicio.descripcion}</p>
-      <button onclick="agregarFavorito(${servicio.id})">
-    Agregar a favoritos
+  <h2 class="mb-3">${servicio.nombre}</h2>
+  
+  <img src="${servicio.imagen}" class="img-fluid rounded mb-3">
+
+  <p>${servicio.descripcion}</p>
+
+  <button class="btn btn-primary mt-3" onclick="agregarFavorito(${servicio.id})">
+    ⭐ Agregar a favoritos
   </button>
-    `;
+`;
   });
 
 
@@ -80,21 +94,40 @@ fetch('data/servicios.json')
     let filtrados = data.filter(s => favoritos.includes(s.id));
 
     if (filtrados.length === 0) {
-      contenedor.innerHTML = "<p>No tienes favoritos</p>";
+      contenedor.innerHTML = `
+  <div class="text-center mt-5">
+    <h4>No tienes favoritos aún</h4>
+    <a href="servicios.html" class="btn btn-primary mt-3">
+      Explorar servicios
+    </a>
+  </div>
+`;
       return;
     }
 
     filtrados.forEach(servicio => {
       contenedor.innerHTML += `
-        <div>
-          <h3>${servicio.nombre}</h3>
-          <p>${servicio.descripcion}</p>
-        </div>
-      `;
+  <div class="col-md-4">
+    <div class="card h-100 shadow-sm">
+
+      <img src="${servicio.imagen}" class="card-img-top">
+
+      <div class="card-body d-flex flex-column">
+        <h5 class="card-title">${servicio.nombre}</h5>
+        <p class="card-text">${servicio.descripcion}</p>
+
+        <button class="btn btn-outline-primary mt-auto" onclick="verDetalle(${servicio.id})">
+          Ver más
+        </button>
+      </div>
+
+    </div>
+  </div>
+`;
     });
   });
 
-  function validarFormulario() {
+function validarFormulario() {
 
   let nombre = document.getElementById("nombre").value;
   let correo = document.getElementById("correo").value;
@@ -113,7 +146,7 @@ fetch('data/servicios.json')
   }
 
   // Si todo está bien
-  alert("Mensaje enviado correctamente");
+  alert("✅ Mensaje enviado correctamente");
 
   return true;
 }
