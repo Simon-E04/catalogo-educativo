@@ -25,10 +25,10 @@
       </a>
 
       <div>
-        <a href="servicios.html" class="me-3 text-decoration-none">Services</a>
+        <a href="servicios.html" class="me-3 text-decoration-none">Servicios</a>
         <a href="favoritos.html" class="me-3 text-decoration-none">Favoritos</a>
         <a href="contacto.html" class="text-decoration-none">
-          <i class="bi bi-envelope"></i> Contact
+          <i class="bi bi-envelope"></i> Contacto
         </a>
       </div>
     </div>
@@ -42,17 +42,32 @@
     </div>
   </div>
 
+  <!-- ➕ FORMULARIO CRUD -->
+  <div class="container mt-4">
+    <h3>Agregar nuevo servicio</h3>
+
+    <input id="nuevoNombre" class="form-control mb-2" placeholder="Nombre">
+    <input id="nuevoDescripcion" class="form-control mb-2" placeholder="Descripción">
+    <input id="nuevaImagen" class="form-control mb-2" placeholder="URL de imagen">
+
+    <button class="btn btn-success" onclick="agregarServicio()">
+      Agregar servicio
+    </button>
+  </div>
+
+  <!-- 🔍 BUSCADOR -->
+  <div class="container mt-4">
+    <input 
+      type="text" 
+      id="buscador" 
+      class="form-control" 
+      placeholder="Buscar cursos..."
+      onkeyup="filtrarServicios()"
+    >
+  </div>
+
   <!-- 📦 SERVICIOS -->
-   <div class="container mb-4">
-  <input 
-    type="text" 
-    id="buscador" 
-    class="form-control" 
-    placeholder="Buscar cursos..."
-    onkeyup="filtrarServicios()"
-  >
-</div>
-  <div class="container">
+  <div class="container mt-4">
     <div id="contenedor" class="row g-4"></div>
   </div>
 

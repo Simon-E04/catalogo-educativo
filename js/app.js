@@ -11,16 +11,22 @@ function mostrarToast(mensaje) {
   }, 2000);
 }
 
-// 🔍 BUSCADOR
+// 🔄 VARIABLES GLOBALES
 let serviciosData = [];
 
+// 📦 CARGAR DATOS UNA SOLA VEZ
 fetch('data/servicios.json')
   .then(res => res.json())
   .then(data => {
     serviciosData = data;
-    renderServicios(data);
+
+    renderServicios(serviciosData);
+    renderDestacados(serviciosData);
+    renderDetalle(serviciosData);
+    renderFavoritos(serviciosData);
   });
 
+// 🔍 RENDER SERVICIOS
 function renderServicios(data) {
   let contenedor = document.getElementById("contenedor");
   if (!contenedor) return;
@@ -46,6 +52,10 @@ function renderServicios(data) {
               <button class="btn btn-outline-warning w-100" onclick="toggleFavorito(${servicio.id})">
                 ⭐ Favorito
               </button>
+
+              <button class="btn btn-danger w-100 mt-2" onclick="eliminarServicio(${servicio.id})">
+                Eliminar
+              </button>
             </div>
           </div>
 
@@ -66,13 +76,44 @@ function filtrarServicios() {
   renderServicios(filtrados);
 }
 
+// ➕ AGREGAR SERVICIO (CRUD)
+function agregarServicio() {
+  let nombre = document.getElementById("nuevoNombre").value;
+  let descripcion = document.getElementById("nuevoDescripcion").value;
+  let imagen = document.getElementById("nuevaImagen").value;
+
+  if (!nombre || !descripcion || !imagen) {
+    mostrarToast("Completa todos los campos");
+    return;
+  }
+
+  let nuevo = {
+    id: Date.now(),
+    nombre,
+    descripcion,
+    imagen
+  };
+
+  serviciosData.push(nuevo);
+  renderServicios(serviciosData);
+
+  mostrarToast("Servicio agregado");
+}
+
+// ❌ ELIMINAR SERVICIO (CRUD)
+function eliminarServicio(id) {
+  serviciosData = serviciosData.filter(s => s.id !== id);
+  renderServicios(serviciosData);
+  mostrarToast("Servicio eliminado");
+}
+
 // 📄 DETALLE
 function verDetalle(id) {
   localStorage.setItem("servicioSeleccionado", id);
   window.location.href = "detalle.html";
 }
 
-// ⭐ FAVORITOS (AGREGAR / QUITAR)
+// ⭐ FAVORITOS
 function toggleFavorito(id) {
   let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
 
@@ -87,24 +128,20 @@ function toggleFavorito(id) {
   localStorage.setItem("favoritos", JSON.stringify(favoritos));
 }
 
-// 📄 MOSTRAR DETALLE
-fetch('data/servicios.json')
-  .then(res => res.json())
-  .then(data => {
+// 📄 RENDER DETALLE
+function renderDetalle(data) {
+  let contenedor = document.getElementById("detalle");
+  if (!contenedor) return;
 
-    let contenedor = document.getElementById("detalle");
-    if (!contenedor) return;
+  let id = localStorage.getItem("servicioSeleccionado");
+  let servicio = data.find(s => s.id == id);
 
-    let id = localStorage.getItem("servicioSeleccionado");
-    let servicio = data.find(s => s.id == id);
+  if (!servicio) {
+    contenedor.innerHTML = "<p>No encontrado</p>";
+    return;
+  }
 
-    if (!servicio) {
-      contenedor.innerHTML = "<p>No encontrado</p>";
-      return;
-    }
-
-    contenedor.innerHTML = `
-  <!-- 🎯 HERO -->
+  contenedor.innerHTML = `
   <div class="detalle-hero p-5 text-white">
     <div class="container">
       <span class="badge bg-warning text-dark mb-3">Curso</span>
@@ -117,18 +154,12 @@ fetch('data/servicios.json')
     </div>
   </div>
 
-  <!-- 📦 CONTENIDO -->
   <div class="container mt-5">
     <div class="row">
 
-      <!-- IZQUIERDA -->
       <div class="col-md-8">
-
         <h3>📘 Sobre este curso</h3>
-        <p>
-          Este curso está diseñado para brindarte conocimientos prácticos y actualizados.
-          Aprenderás paso a paso con ejemplos reales.
-        </p>
+        <p>Curso práctico y actualizado.</p>
 
         <h4 class="mt-4">📚 Lo que aprenderás</h4>
         <ul>
@@ -136,76 +167,87 @@ fetch('data/servicios.json')
           <li>Buenas prácticas</li>
           <li>Desarrollo profesional</li>
         </ul>
-
       </div>
 
-      <!-- DERECHA -->
       <div class="col-md-4">
-
         <div class="card shadow">
           <img src="${servicio.imagen}" class="card-img-top">
-
           <div class="card-body text-center">
             <h5>${servicio.nombre}</h5>
-
-            <button class="btn btn-primary w-100 mt-3">
-              Inscribirse
-            </button>
-
+            <button class="btn btn-primary w-100 mt-3">Inscribirse</button>
             <p class="mt-3 text-muted">Acceso inmediato</p>
           </div>
         </div>
-
       </div>
 
     </div>
   </div>
-`;
-  });
+  `;
+}
 
-// ⭐ MOSTRAR FAVORITOS
-fetch('data/servicios.json')
-  .then(res => res.json())
-  .then(data => {
+// ⭐ RENDER FAVORITOS
+function renderFavoritos(data) {
+  let contenedor = document.getElementById("favoritos");
+  if (!contenedor) return;
 
-    let contenedor = document.getElementById("favoritos");
-    if (!contenedor) return;
+  let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+  let filtrados = data.filter(s => favoritos.includes(s.id));
 
-    let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+  contenedor.innerHTML = "";
 
-    let filtrados = data.filter(s => favoritos.includes(s.id));
+  if (filtrados.length === 0) {
+    contenedor.innerHTML = `
+      <div class="text-center">
+        <h4>No tienes favoritos</h4>
+        <a href="servicios.html" class="btn btn-primary mt-3">
+          Explorar
+        </a>
+      </div>
+    `;
+    return;
+  }
 
-    if (filtrados.length === 0) {
-      contenedor.innerHTML = `
-        <div class="text-center">
-          <h4>No tienes favoritos</h4>
-          <a href="servicios.html" class="btn btn-primary mt-3">
-            Explorar
-          </a>
-        </div>
-      `;
-      return;
-    }
+  filtrados.forEach(servicio => {
+    contenedor.innerHTML += `
+      <div class="col-md-4">
+        <div class="card shadow-sm">
+          <img src="${servicio.imagen}" class="card-img-top">
 
-    filtrados.forEach(servicio => {
-      contenedor.innerHTML += `
-        <div class="col-md-4">
-          <div class="card shadow-sm">
-            <img src="${servicio.imagen}" class="card-img-top">
+          <div class="card-body">
+            <h5>${servicio.nombre}</h5>
+            <p>${servicio.descripcion}</p>
 
-            <div class="card-body">
-              <h5>${servicio.nombre}</h5>
-              <p>${servicio.descripcion}</p>
-
-              <button class="btn btn-danger w-100" onclick="toggleFavorito(${servicio.id})">
-                Quitar
-              </button>
-            </div>
+            <button class="btn btn-danger w-100" onclick="toggleFavorito(${servicio.id})">
+              Quitar
+            </button>
           </div>
         </div>
-      `;
-    });
+      </div>
+    `;
   });
+}
+
+// 🏠 HOME DINÁMICO
+function renderDestacados(data) {
+  let contenedor = document.getElementById("destacados");
+  if (!contenedor) return;
+
+  let primeros = data.slice(0, 3);
+
+  primeros.forEach(servicio => {
+    contenedor.innerHTML += `
+      <div class="col-md-4">
+        <div class="card shadow-sm">
+          <img src="${servicio.imagen}" class="card-img-top">
+          <div class="card-body">
+            <h5>${servicio.nombre}</h5>
+            <p>${servicio.descripcion}</p>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+}
 
 // 📩 FORM
 function validarFormulario() {
