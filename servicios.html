@@ -35,7 +35,7 @@
   </nav>
 
   <!-- 🎯 HEADER -->
-  <div class="bg-dark text-white p-5 mb-4">
+  <div class="hero p-5 mb-4">
     <div class="container">
       <h1 class="display-5 fw-bold">Nuestros Servicios</h1>
       <p class="lead">Explora nuestros cursos disponibles</p>
@@ -43,6 +43,15 @@
   </div>
 
   <!-- 📦 SERVICIOS -->
+   <div class="container mb-4">
+  <input 
+    type="text" 
+    id="buscador" 
+    class="form-control" 
+    placeholder="Buscar cursos..."
+    onkeyup="filtrarServicios()"
+  >
+</div>
   <div class="container">
     <div id="contenedor" class="row g-4"></div>
   </div>

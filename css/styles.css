@@ -1,20 +1,74 @@
+/* 🌍 GENERAL */
 body {
-  background-color: #f5f7fa;
+  background-color: #f5f7fb;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* 🧭 NAVBAR */
+.navbar {
+  border-radius: 0 0 12px 12px;
+}
+
+/* 🎯 HEADER */
+.hero {
+  background: linear-gradient(135deg, #0d6efd, #0b3d91);
+  color: white;
+  border-radius: 0 0 20px 20px;
+}
+
+/* 📦 CARDS */
 .card {
-  border-radius: 12px;
-}
-
-body {
-  background-color: #f5f7fa;
-}
-
-.card {
-  border-radius: 12px;
-  transition: transform 0.2s;
+  border: none;
+  border-radius: 16px;
+  transition: all 0.25s ease;
 }
 
 .card:hover {
-  transform: scale(1.03);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.card img {
+  height: 180px;
+  object-fit: cover;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+/* 🔘 BOTONES */
+.btn-primary {
+  border-radius: 10px;
+  padding: 8px 16px;
+}
+
+/* 📩 FORM */
+input, textarea {
+  border-radius: 10px !important;
+}
+
+/* 🦶 FOOTER */
+footer {
+  border-radius: 20px 20px 0 0;
+}
+
+.toast-custom {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #0d6efd;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 🎯 HERO DETALLE */
+.detalle-hero {
+  background: linear-gradient(135deg, #0d6efd, #0b3d91);
 }
